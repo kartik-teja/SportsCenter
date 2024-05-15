@@ -1,13 +1,15 @@
 
 import './App.css'
 
+import MatchList from './pages/Matches/MatchList'
+
 function App() {
 
   return (
     <>
       <div className="flex flex-col">
         <div className="md:container md:mx-auto">
-          live matches
+          <MatchList />
         </div>
 
         <div className="flex flex-row flex-nowrap ">
