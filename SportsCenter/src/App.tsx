@@ -1,7 +1,8 @@
 import './App.css'
 
 import MatchList from './pages/Matches/MatchList'
-import Favourites from './pages/News/Favorites'
+import Favourites from './pages/News/Favourites'
+
 import LiveNews from './pages/News/LiveNews'
 
 function App() {
