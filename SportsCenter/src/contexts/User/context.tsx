@@ -1,20 +1,20 @@
 import React, { createContext, useContext, useReducer } from "react";
-import { teamReducer, initialState } from "./reducer";
-import { TeamState, TeamDispatch } from "./types";
-const teamStateContext = createContext<TeamState>(initialState);
-const teamDispatchContext = createContext<TeamDispatch>(() => { });
-export const TeamProvider: React.FC<React.PropsWithChildren> = ({
+import { userReducer, initialState } from "./reducer";
+import { UserState, UserDispatch } from "./types";
+const userStateContext = createContext<UserState>(initialState);
+const userDispatchContext = createContext<UserDispatch>(() => { });
+export const UserProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const [state, dispatch] = useReducer(teamReducer, initialState);
+    const [state, dispatch] = useReducer(userReducer, initialState);
     return (
-        <teamStateContext.Provider value={state}>
-            <teamDispatchContext.Provider value={dispatch}>
+        <userStateContext.Provider value={state}>
+            <userDispatchContext.Provider value={dispatch}>
                 {children}
-            </teamDispatchContext.Provider>
-        </teamStateContext.Provider>
+            </userDispatchContext.Provider>
+        </userStateContext.Provider>
     )
 }
 
-export const useTeamState = () => useContext(teamStateContext);
-export const useTeamDispatch = () => useContext(teamDispatchContext);
+export const useUserState = () => useContext(userStateContext);
+export const useUserDispatch = () => useContext(userDispatchContext);

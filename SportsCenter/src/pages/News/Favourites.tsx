@@ -69,7 +69,7 @@ const Favourites: React.FC = () => {
                         </div>
                     ))
                 ) : (
-                    <p className="text-gray-500">No news available for this sport.</p>
+                    <p className="text-white text-center">No news available</p>
                 )}
             </div>
         </div>

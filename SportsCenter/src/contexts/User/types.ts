@@ -1,29 +1,45 @@
 import React from "react";
 
-export interface TeamState {
-    teamData: team[];
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+    preferences: Record<string, JSON>;
+}
+
+export interface UserState {
+    userData: User;
     isLoading: boolean;
     isError: boolean;
     errorMessage: string;
 }
 
-export enum TeamListAvailableActions {
-    FETCH_TEAM_REQUEST = "FETCH_TEAM_REQUEST",
-    FETCH_TEAM_SUCCESS = "FETCH_TEAM_SUCCESS",
-    FETCH_TEAM_FAILURE = "FETCH_TEAM_FAILURE"
+export enum UserAvailableActions {
+    FETCH_USER_REQUEST = "FETCH_USER_REQUEST",
+    FETCH_USER_SUCCESS = "FETCH_USER_SUCCESS",
+    FETCH_USER_FAILURE = "FETCH_USER_FAILURE",
+    POST_USER_REQUEST = "POST_USER_REQUEST",
+    POST_USER_SUCCESS = "POST_USER_SUCCESS",
+    POST_USER_FAILURE = "POST_USER_FAILURE",
+    PATCH_USER_REQUEST = "PATCH_USER_REQUEST",
+    PATCH_USER_SUCCESS = "PATCH_USER_SUCCESS",
+    PATCH_USER_FAILURE = "PATCH_USER_FAILURE",
 }
 
-export type team = {
-    id: number;
-    name: string;
-    plays: string;
-}
 
-export type TeamPayload = Omit<team, "id">;
+export type UserPayload = Omit<User, "id">;
 
-export type TeamActions =
-    | { type: TeamListAvailableActions.FETCH_TEAM_REQUEST }
-    | { type: TeamListAvailableActions.FETCH_TEAM_SUCCESS; payload: team[] }
-    | { type: TeamListAvailableActions.FETCH_TEAM_FAILURE; payload: string }
 
-export type TeamDispatch = React.Dispatch<TeamActions>;
+export type UserActions =
+    | { type: UserAvailableActions.FETCH_USER_REQUEST }
+    | { type: UserAvailableActions.FETCH_USER_SUCCESS; payload: User }
+    | { type: UserAvailableActions.FETCH_USER_FAILURE; payload: string }
+    | { type: UserAvailableActions.POST_USER_REQUEST }
+    | { type: UserAvailableActions.POST_USER_SUCCESS; payload: User }
+    | { type: UserAvailableActions.POST_USER_FAILURE; payload: string }
+    | { type: UserAvailableActions.PATCH_USER_REQUEST }
+    | { type: UserAvailableActions.PATCH_USER_SUCCESS; payload: User }
+    | { type: UserAvailableActions.PATCH_USER_FAILURE; payload: string };
+
+
+export type UserDispatch = React.Dispatch<UserActions>;
