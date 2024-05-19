@@ -5,7 +5,7 @@ export interface User {
     name: string;
     email: string;
     password: string;
-    preferences: JSON;
+    preferences: object | unknown;
 }
 
 export interface UserState {
