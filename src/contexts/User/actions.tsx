@@ -1,6 +1,6 @@
 import { API_ENDPOINT } from "../../config/constants";
 
-import { User, UserAvailableActions, UserDispatch } from './types';
+import { UserAvailableActions, UserDispatch } from './types';
 
 export const fetchUser = async (
     dispatch: UserDispatch,
@@ -65,7 +65,7 @@ export const fetchUserPreference = async (
         })
     }
 };
-export const postUser = async (dispatch: UserDispatch, userData: User) => {
+export const postUser = async (dispatch: UserDispatch, userData: { name: string, email: string, password: string }) => {
     try {
         dispatch({ type: UserAvailableActions.POST_USER_REQUEST });
         const response = await fetch(`${API_ENDPOINT}/users`, {
