@@ -145,7 +145,7 @@ export const patchUserPassword = async (dispatch: UserDispatch, passwordData: { 
     }
 };
 
-export const patchUserPreference = async (dispatch: UserDispatch, preferenceData: { preferences: JSON }) => {
+export const patchUserPreference = async (dispatch: UserDispatch, preferenceData: { preferences: string }) => {
     try {
         dispatch({ type: UserAvailableActions.PATCH_USER_PREFERENCE_REQUEST });
         const response = await fetch(`${API_ENDPOINT}/user/preference`, {

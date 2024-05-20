@@ -14,7 +14,7 @@ const UserPreferenceEditor: React.FC<UserPreferenceEditorProps> = ({ isOpen, onC
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await patchUserPreference(dispatch, { preferences: { sports: selectedSports } });
+        await patchUserPreference(dispatch, { preferences: JSON.parse(JSON.stringify(selectedSports)) });
         onClose();
     };
 
