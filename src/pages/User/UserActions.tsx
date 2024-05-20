@@ -22,9 +22,9 @@ const UserActionsButton: React.FC<UserActionsButtonProps> = ({ isAuthenticated }
     };
 
     const handleLogoutClick = () => {
-        localStorage.removeItem('authToken');
+        localStorage.removeItem("authToken");
         localStorage.removeItem("userData")
-        navigate('/');
+        window.location.reload();
     };
 
     const handlePasswordChangeClick = () => {

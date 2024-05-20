@@ -5,13 +5,16 @@ import UserActionsButton from '../User/UserActions';
 
 
 function Home() {
+    const isAuthenticated = () => {
+        return localStorage.getItem('authToken') ? true : false;
+    };
     return (<>
         <div className="flex justify-between items-center w-full">
             <div className='flex justify-center w-full'>
                 <h1 className="text-3xl">Sports Center</h1>
             </div>
             <div className="flex justify-end">
-                <UserActionsButton isAuthenticated={false} />
+                <UserActionsButton isAuthenticated={isAuthenticated()} />
             </div>
         </div>
         <div className="flex flex-col min-h-screen bg-gray-100">
