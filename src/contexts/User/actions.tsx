@@ -65,32 +65,7 @@ export const fetchUserPreference = async (
         })
     }
 };
-export const postUser = async (dispatch: UserDispatch, userData: { name: string, email: string, password: string }) => {
-    try {
-        dispatch({ type: UserAvailableActions.POST_USER_REQUEST });
-        const response = await fetch(`${API_ENDPOINT}/users`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData)
-        });
-        if (!response.ok) {
-            throw new Error("Failed to create user");
-        }
-        const data = await response.json();
-        dispatch({
-            type: UserAvailableActions.POST_USER_SUCCESS,
-            payload: data,
-        });
-    } catch (error) {
-        console.error("Operation failed:", error);
-        dispatch({
-            type: UserAvailableActions.POST_USER_FAILURE,
-            payload: "Unable to create user"
-        })
-    }
-};
+
 
 export const postUserSignIn = async (dispatch: UserDispatch, credentials: { email: string, password: string }) => {
     try {

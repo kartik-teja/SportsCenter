@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import UserPreferenceEditor from "./UserPreference";
-import EditPasswordPage from "./EditPassword";
+import { Menu, Transition } from '@headlessui/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGears, faUser } from '@fortawesome/free-solid-svg-icons';
+import UserPreferenceEditor from './UserPreference';
+import EditPasswordPage from './EditPassword';
 
 interface UserActionsButtonProps {
     isAuthenticated: boolean;
+}
+
+function classNames(...classes: string[]) {
+    return classes.filter(Boolean).join(' ');
 }
 
 const UserActionsButton: React.FC<UserActionsButtonProps> = ({ isAuthenticated }) => {
     const navigate = useNavigate();
     const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
     const [isPasswordOpen, setIsPasswordOpen] = useState(false);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const handleSignInClick = () => {
         navigate('/user/signin');
@@ -22,8 +28,8 @@ const UserActionsButton: React.FC<UserActionsButtonProps> = ({ isAuthenticated }
     };
 
     const handleLogoutClick = () => {
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("userData")
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
         window.location.reload();
     };
 
@@ -43,49 +49,101 @@ const UserActionsButton: React.FC<UserActionsButtonProps> = ({ isAuthenticated }
         setIsPasswordOpen(false);
     };
 
-    const toggleDropdown = () => {
-        setDropdownOpen(!dropdownOpen);
-    };
+    return (
+        <>
+            <button
+                onClick={handlePreferencesEditClick}
+                className='bg-gray-100 text-gray-900'
+            >
+                <FontAwesomeIcon icon={faGears} className="mr-2" />
+                Preferences
+            </button>
+            <Menu as="div" className="relative inline-block text-left">
+                <div>
+                    <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-3xl font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                        <FontAwesomeIcon icon={faUser} />
 
-    return (<>
-
-        {isAuthenticated ? (<>
-
-            <button onClick={handlePreferencesEditClick} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"><img src="SportsCenter/src/assets/settings.png"></img></button>
-        </>) : (<></>)}
-
-        <button
-            onClick={toggleDropdown}
-            className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
-            id="dropdown-menu"
-            aria-haspopup="true"
-            aria-expanded="true">
-            User Actions
-        </button>
-
-
-        {dropdownOpen && (
-            <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu">
-                <div className="py-1" role="none">
-                    {isAuthenticated ? (
-                        <>
-                            <button onClick={handleLogoutClick} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Logout</button>
-                            <button onClick={handlePasswordChangeClick} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Change Password</button>
-                            <button onClick={handlePreferencesEditClick} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Edit Preferences</button>
-                        </>
-                    ) : (
-                        <>
-                            <button onClick={handleSignInClick} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign In</button>
-                            <button onClick={handleSignUpClick} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign Up</button>
-                        </>
-                    )}
+                    </Menu.Button>
                 </div>
-            </div>
-        )}
 
-        <UserPreferenceEditor isOpen={isPreferencesOpen} onClose={closePreferencesModal} availableSports={[]} />
-        <EditPasswordPage isOpen={isPasswordOpen} onClose={closePasswordModal} />
-    </>
+                <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                >
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <div className="py-1">
+                            {isAuthenticated ? (
+                                <>
+                                    <Menu.Item>
+                                        {({ active }) => (
+                                            <button
+                                                onClick={handleLogoutClick}
+                                                className={classNames(
+                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                    'block px-4 py-2 text-sm'
+                                                )}
+                                            >
+                                                Logout
+                                            </button>
+                                        )}
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        {({ active }) => (
+                                            <button
+                                                onClick={handlePasswordChangeClick}
+                                                className={classNames(
+                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                    'block px-4 py-2 text-sm'
+                                                )}
+                                            >
+                                                Change Password
+                                            </button>
+                                        )}
+                                    </Menu.Item>
+                                </>
+                            ) : (
+                                <>
+                                    <Menu.Item>
+                                        {({ active }) => (
+                                            <button
+                                                onClick={handleSignInClick}
+                                                className={classNames(
+                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                    'block px-4 py-2 text-sm'
+                                                )}
+                                            >
+                                                Sign In
+                                            </button>
+                                        )}
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        {({ active }) => (
+                                            <button
+                                                onClick={handleSignUpClick}
+                                                className={classNames(
+                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                    'block px-4 py-2 text-sm'
+                                                )}
+                                            >
+                                                Sign Up
+                                            </button>
+                                        )}
+                                    </Menu.Item>
+                                </>
+                            )}
+                        </div>
+                    </Menu.Items>
+                </Transition>
+            </Menu>
+
+            <UserPreferenceEditor isOpen={isPreferencesOpen} onClose={closePreferencesModal} availableSports={[]} />
+            <EditPasswordPage isOpen={isPasswordOpen} onClose={closePasswordModal} />
+        </>
     );
 };
 

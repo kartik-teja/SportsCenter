@@ -1,15 +1,32 @@
 import React, { useState } from "react";
-import { postUserSignIn } from "../../contexts/User/actions";
-import { useUserDispatch } from "../../contexts/User/context";
+import { API_ENDPOINT } from "../../config/constants";
+import { useNavigate } from "react-router-dom";
 
 const SignInPage: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const userDispatch = useUserDispatch();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await postUserSignIn(userDispatch, { email, password });
+        try {
+            const response = await fetch(`${API_ENDPOINT}/users/sign_in`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password })
+            });
+            if (!response.ok) {
+                throw new Error("Failed to sign in");
+            }
+            const data = await response.json();
+            localStorage.setItem('authToken', data.auth_token);
+            localStorage.setItem('userData', JSON.stringify(data.user))
+            navigate("/");
+        } catch (error) {
+            console.error("Signin failed:", error);
+        }
     };
 
     return (
