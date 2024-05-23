@@ -19,12 +19,11 @@ const MatchCard = () => {
         return <div>Error: {matchListState.errorMessage}</div>;
     }
 
-    console.log(matchListState);
 
     return (
         <div className="match-card-container">
             {Object.values(matchListState.matchData).map((match) => (
-                <div key={match.id} className="match-card">
+                <div key={match.id} className="match-card p-2">
                     <h2>{match.teams.map(team => team.name).join(' vs ')}</h2>
                     <p>Date: {new Date(match.endsAt).toLocaleDateString()}</p>
                     <p>Location: {match.location}</p>

@@ -1,3 +1,4 @@
+import { NewsProvider } from '../../contexts/News/context';
 import MatchList from '../Matches/MatchList';
 import Favourites from '../News/Favourites';
 import LiveNews from '../News/LiveNews';
@@ -25,7 +26,7 @@ function Home() {
             <h1 className='text-left pl-4'>Trending News</h1>
             <div className="flex flex-col md:flex-row flex-wrap p-1">
                 <div className="flex-1 md:flex-none md:w-2/3 p-4 bg-white rounded shadow-md">
-                    <LiveNews />
+                    <NewsProvider><LiveNews /></NewsProvider>
                 </div>
                 <div className="flex-1 md:flex-none md:w-1/3 p-4 bg-gray-500 rounded shadow-md ">
                     <h2>Favourites</h2>

@@ -1,5 +1,5 @@
 
-import { useMatchState } from "../../contexts/Matches/context";
+import { MatchProvider, useMatchState } from "../../contexts/Matches/context";
 import MatchCard from "./MatchCard";
 
 const MatchList = () => {
@@ -10,7 +10,10 @@ const MatchList = () => {
     }
 
     return (
-        <MatchCard />
+        <MatchProvider>
+            <MatchCard />
+        </MatchProvider>
+
     )
 };
 

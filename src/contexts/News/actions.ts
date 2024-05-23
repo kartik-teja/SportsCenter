@@ -15,6 +15,7 @@ export const fetchMatch = async (
                 }
             }
         );
+        console.log(response)
         if (!response.ok) {
             throw new Error("Failed to fetch News");
         }
@@ -24,7 +25,9 @@ export const fetchMatch = async (
             type: NewsListAvailableActions.FETCH_NEWS_SUCCESS,
             payload: data,
         });
+
         console.dir(data);
+
     } catch (error) {
         console.error("Operation failed:", error);
         dispatch({

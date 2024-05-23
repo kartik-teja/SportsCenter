@@ -22,9 +22,9 @@ export const fetchMatch = async (
         const data = await response.json();
         dispatch({
             type: MatchListAvailableActions.FETCH_MATCH_SUCCESS,
-            payload: data,
+            payload: data.matches,
         });
-        console.dir(data);
+
     } catch (error) {
         console.error("Operation failed:", error);
         dispatch({
