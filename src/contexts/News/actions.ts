@@ -2,7 +2,7 @@ import { API_ENDPOINT } from "../../config/constants";
 
 import { NewsListAvailableActions, NewsDispatch } from './types';
 
-export const fetchMatch = async (
+export const fetchNews = async (
     dispatch: NewsDispatch,
 ) => {
     try {
