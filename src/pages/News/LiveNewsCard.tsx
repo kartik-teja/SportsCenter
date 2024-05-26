@@ -11,7 +11,6 @@ const NewsCard: React.FC<NewsCardProps> = ({ selectedSport }) => {
     const NewsDispatch = useNewsDispatch();
 
     useEffect(() => {
-        // Fetch News data when the component mounts or when selectedSport changes
         fetchNews(NewsDispatch);
     }, [NewsDispatch, selectedSport]);
 
@@ -23,10 +22,6 @@ const NewsCard: React.FC<NewsCardProps> = ({ selectedSport }) => {
         return <div>Error: {NewsListState.errorMessage}</div>;
     }
 
-    const truncateSummary = (summary: string) => {
-        return summary.length > 50 ? summary.slice(0, 50) + '...' : summary;
-    };
-
     const filteredNews = NewsListState.newsData.filter(article => article.sport.id === selectedSport);
 
     return (
@@ -37,7 +32,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ selectedSport }) => {
                         <div className="md:w-2/3 w-full">
                             <p className="text-gray-500">{article.sport.name}</p>
                             <h2 className="text-2xl font-bold mb-2">{article.title}</h2>
-                            <p className="mb-2">{truncateSummary(article.summary)}</p>
+                            <p className="mb-2">{article.summary}</p>
                             <p className="text-gray-500">{new Date(article.date).toLocaleDateString()} <span className="font-bold text-gray-900 text-right">read more..</span></p>
                         </div>
                         <div className="md:w-1/3 max-h-46 w-full md:mr-4">

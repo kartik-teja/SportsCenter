@@ -2,7 +2,7 @@ import { API_ENDPOINT } from "../../config/constants";
 
 import { SportListAvailableActions, SportDispatch } from './types';
 
-export const fetchMatch = async (
+export const fetchSport = async (
     dispatch: SportDispatch,
 ) => {
     try {
@@ -22,9 +22,9 @@ export const fetchMatch = async (
         const data = await response.json();
         dispatch({
             type: SportListAvailableActions.FETCH_SPORTS_SUCCESS,
-            payload: data,
+            payload: data.sports,
         });
-        console.dir(data);
+
     } catch (error) {
         console.error("Operation failed:", error);
         dispatch({

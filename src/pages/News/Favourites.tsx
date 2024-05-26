@@ -1,33 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { useNewsState } from '../../contexts/News/context';
-import { useSportState } from '../../contexts/Sports/context';
+import { useNewsDispatch, useNewsState } from '../../contexts/News/context';
+import { useSportDispatch, useSportState } from '../../contexts/Sports/context';
 import { sport } from '../../contexts/Sports/types';
-import { useTeamState } from '../../contexts/Teams/context';
+import { useTeamDispatch, useTeamState } from '../../contexts/Teams/context';
 import { team } from '../../contexts/Teams/types';
+import { fetchNews } from '../../contexts/News/actions';
+import { fetchSport } from '../../contexts/Sports/actions';
+import { fetchTeam } from '../../contexts/Teams/actions';
 
 const Favourites: React.FC = () => {
-    const { newsData } = useNewsState();
-    const { sportData } = useSportState();
-    const { teamData } = useTeamState();
+    const NewsState = useNewsState();
+    const NewsDispatch = useNewsDispatch();
+    const SportState = useSportState();
+    const SportDispatch = useSportDispatch();
+    const TeamState = useTeamState();
+    const TeamDispatch = useTeamDispatch();
     const [selectedSport, setSelectedSport] = useState<string>("Select the Sport");
     const [selectedTeam, setSelectedTeam] = useState<string>("Select The Team");
 
 
     useEffect(() => {
-        if (sportData.sports.length > 0) {
-            setSelectedSport(sportData.sports[0].id.toString());
-        }
-    }, [sportData.sports]);
-
-    const truncateSummary = (summary: string) => {
-        return summary.length > 50 ? summary.slice(0, 50) + '...' : summary;
-    };
+        fetchNews(NewsDispatch);
+        fetchSport(SportDispatch);
+        fetchTeam(TeamDispatch);
+    }, [SportDispatch, TeamDispatch, NewsDispatch]);
 
     const filterTeam = (team: team) => {
-        return team.plays === sportData.sports.find(sport => sport.id.toString() === selectedSport)?.name;
+        return team.plays === SportState.sportData.sports.find(sport => sport.id.toString() === selectedSport)?.name;
     }
 
-    const filteredNews = newsData.filter(article => {
+    const filteredNews = NewsState.newsData.filter(article => {
         const sportMatch = article.sport.id.toString() === selectedSport;
         const teamMatch = article.teams.some(team => team.id.toString() === selectedTeam);
         return sportMatch && teamMatch;
@@ -41,7 +43,7 @@ const Favourites: React.FC = () => {
                     onChange={(e) => setSelectedSport(e.target.value)}
                     className="inline-flex justify-center w-full px-4 py-2 border rounded bg-gray-200"
                 >
-                    {sportData.sports.map((sport: sport) => (
+                    {SportState.sportData.sports.map((sport: sport) => (
                         <option key={sport.id} value={sport.id}>{sport.name}</option>
                     ))}
                 </select>
@@ -53,7 +55,7 @@ const Favourites: React.FC = () => {
                     onChange={(e) => setSelectedTeam(e.target.value)}
                     className="inline-flex justify-center w-full px-4 py-2 border rounded bg-gray-200"
                 >
-                    {teamData.filter(filterTeam).map((team: team) => (
+                    {TeamState.teamData.filter(filterTeam).map((team: team) => (
                         <option key={team.id} value={team.id}>{team.name}</option>
                     ))}
                 </select>
@@ -64,7 +66,7 @@ const Favourites: React.FC = () => {
                     filteredNews.map(article => (
                         <div key={article.id} className="border bg-white p-4 rounded-lg  md:flex-row">
                             <h2 className="text font-bold mb-2">{article.title}</h2>
-                            <p className="mb-2">{truncateSummary(article.summary)}</p>
+                            <p className="mb-2">{article.summary}</p>
                             <button className="text-center bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition-colors duration-300">Read more</button>
                         </div>
                     ))

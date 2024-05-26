@@ -24,6 +24,7 @@ export type News = {
     sport: sport;
     date: string;
     summary: string;
+    content: string;
     teams: team[]
 }
 

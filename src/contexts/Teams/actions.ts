@@ -2,7 +2,7 @@ import { API_ENDPOINT } from "../../config/constants";
 
 import { TeamListAvailableActions, TeamDispatch } from './types';
 
-export const fetchMatch = async (
+export const fetchTeam = async (
     dispatch: TeamDispatch,
 ) => {
     try {
@@ -24,7 +24,7 @@ export const fetchMatch = async (
             type: TeamListAvailableActions.FETCH_TEAM_SUCCESS,
             payload: data,
         });
-        console.dir(data);
+
     } catch (error) {
         console.error("Operation failed:", error);
         dispatch({

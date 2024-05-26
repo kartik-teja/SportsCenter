@@ -26,11 +26,16 @@ function Home() {
             <h1 className='text-left pl-4'>Trending News</h1>
             <div className="flex flex-col md:flex-row flex-wrap p-1">
                 <div className="flex-1 md:flex-none md:w-2/3 p-4 bg-white rounded shadow-md">
-                    <NewsProvider><LiveNews /></NewsProvider>
+                    <NewsProvider>
+                        <LiveNews />
+                    </NewsProvider>
                 </div>
                 <div className="flex-1 md:flex-none md:w-1/3 p-4 bg-gray-500 rounded shadow-md ">
                     <h2>Favourites</h2>
-                    <Favourites />
+                    <NewsProvider>
+                        <Favourites />
+                    </NewsProvider>
+
                 </div>
             </div>
         </div>
