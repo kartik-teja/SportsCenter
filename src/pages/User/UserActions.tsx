@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGears, faUser } from '@fortawesome/free-solid-svg-icons';
 import UserPreferenceEditor from './UserPreference';
 import EditPasswordPage from './EditPassword';
-import { UserProvider } from '../../contexts/User/context';
 
 interface UserActionsButtonProps {
     isAuthenticated: boolean;
@@ -42,24 +41,25 @@ const UserActionsButton: React.FC<UserActionsButtonProps> = ({ isAuthenticated }
         setIsPreferencesOpen(true);
     };
 
-    const closePreferencesModal = () => {
-        setIsPreferencesOpen(false);
-    };
-
     const closePasswordModal = () => {
         setIsPasswordOpen(false);
     };
 
     return (
-        <><UserProvider >
-            <button
-                onClick={handlePreferencesEditClick}
-                className='bg-gray-100 text-gray-900'
-            >
-                <FontAwesomeIcon icon={faGears} className="mr-2" />
-                Preferences
-            </button>
-            <Menu as="div" className="pl-2 relative inline-block ">
+        <>
+            {isAuthenticated ? (
+                <>
+                    <button
+                        onClick={handlePreferencesEditClick}
+                        className='bg-gray-100 text-gray-900'
+                    >
+                        <FontAwesomeIcon icon={faGears} className="mr-2" />
+                        Preferences
+                    </button>
+
+                    {isPreferencesOpen && <UserPreferenceEditor onClose={() => { setIsPreferencesOpen(false); window.location.reload() }} />}
+                </>) : (<></>)}
+            < Menu as="div" className="pl-2 relative inline-block ">
                 <div>
                     <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-3xl font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                         <FontAwesomeIcon icon={faUser} />
@@ -140,11 +140,9 @@ const UserActionsButton: React.FC<UserActionsButtonProps> = ({ isAuthenticated }
                         </div>
                     </Menu.Items>
                 </Transition>
-            </Menu>
+            </Menu >
 
-            <UserPreferenceEditor isOpen={isPreferencesOpen} onClose={closePreferencesModal} />
             <EditPasswordPage isOpen={isPasswordOpen} onClose={closePasswordModal} />
-        </UserProvider>
         </>
     );
 };
