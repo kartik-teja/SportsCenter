@@ -39,10 +39,10 @@ function Home() {
             </div>
             <div className="flex flex-col min-h-screen bg-gray-100">
                 <div className="mx-2 my-4 p-4 bg-white rounded shadow-md">
-                    <h2 className='text-xl text-strong text-left text-gray-800'>Live Games</h2>
+                    <h2 className='text-3xl text-strong text-left text-gray-800 px-1'>Live Games</h2>
                     <MatchList />
                 </div>
-                <h1 className='text-xl text-left pl-4 text-gray-800'>Trending News</h1>
+                <h1 className='text-3xl text-left pl-4 text-gray-800'>Trending News</h1>
                 <div className='max-h-50vh'>
                     <div className="flex flex-col md:flex-row flex-wrap p-1">
                         <div className="flex-1 md:flex-none md:w-2/3 p-4 bg-white rounded shadow-md">
@@ -51,7 +51,7 @@ function Home() {
                             </NewsProvider>
                         </div>
                         <div className="flex-1 md:flex-none md:w-1/3 p-4 bg-gray-300 rounded shadow-md ">
-                            <h2 className="text-white bg-blue-900 py-2 px-4 rounded-lg mb-4">Favourites</h2>
+                            <h2 className="text-white text-xl text-center bg-blue-900 py-2 px-4 rounded-lg mb-4">Favourites</h2>
                             <NewsProvider>
                                 <Favourites />
                             </NewsProvider>

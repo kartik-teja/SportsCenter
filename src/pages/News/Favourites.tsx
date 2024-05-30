@@ -53,8 +53,8 @@ const Favourites: React.FC = () => {
                 <select
                     value={selectedSport}
                     onChange={(e) => setSelectedSport(e.target.value)}
-                    className="inline-flex justify-center w-full px-4 py-2 border rounded bg-gray-200"
-                >
+                    className="inline-flex justify-center w-full px-4 py-2 border rounded bg-white"
+                ><option>Select a Sport</option>
                     {SportState.sportData.sports.map((sport: sport) => (
                         <option key={sport.id} value={sport.id}>{sport.name}</option>
                     ))}
@@ -65,8 +65,8 @@ const Favourites: React.FC = () => {
                 <select
                     value={selectedTeam}
                     onChange={(e) => setSelectedTeam(e.target.value)}
-                    className="inline-flex justify-center w-full px-4 py-2 border rounded bg-gray-200"
-                >
+                    className="inline-flex justify-center w-full px-4 py-2 border rounded bg-white"
+                ><option>Select a Team</option>
                     {TeamState.teamData.filter(filterTeam).map((team: team) => (
                         <option key={team.id} value={team.id}>{team.name}</option>
                     ))}
