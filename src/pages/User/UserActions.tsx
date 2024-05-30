@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGears, faUser } from '@fortawesome/free-solid-svg-icons';
 import UserPreferenceEditor from './UserPreference';
 import EditPasswordPage from './EditPassword';
+import { UserProvider } from '../../contexts/User/context';
 
 interface UserActionsButtonProps {
     isAuthenticated: boolean;
@@ -50,7 +51,7 @@ const UserActionsButton: React.FC<UserActionsButtonProps> = ({ isAuthenticated }
     };
 
     return (
-        <>
+        <><UserProvider >
             <button
                 onClick={handlePreferencesEditClick}
                 className='bg-gray-100 text-gray-900'
@@ -58,7 +59,7 @@ const UserActionsButton: React.FC<UserActionsButtonProps> = ({ isAuthenticated }
                 <FontAwesomeIcon icon={faGears} className="mr-2" />
                 Preferences
             </button>
-            <Menu as="div" className="relative inline-block text-left">
+            <Menu as="div" className="pl-2 relative inline-block ">
                 <div>
                     <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-3xl font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                         <FontAwesomeIcon icon={faUser} />
@@ -75,7 +76,7 @@ const UserActionsButton: React.FC<UserActionsButtonProps> = ({ isAuthenticated }
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                 >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="absolute w-auto right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <div className="py-1">
                             {isAuthenticated ? (
                                 <>
@@ -85,7 +86,7 @@ const UserActionsButton: React.FC<UserActionsButtonProps> = ({ isAuthenticated }
                                                 onClick={handleLogoutClick}
                                                 className={classNames(
                                                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                    'block px-4 py-2 text-sm'
+                                                    'block px-4 py-2'
                                                 )}
                                             >
                                                 Logout
@@ -98,7 +99,7 @@ const UserActionsButton: React.FC<UserActionsButtonProps> = ({ isAuthenticated }
                                                 onClick={handlePasswordChangeClick}
                                                 className={classNames(
                                                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                    'block px-4 py-2 text-sm'
+                                                    'block px-4 py-2'
                                                 )}
                                             >
                                                 Change Password
@@ -114,7 +115,7 @@ const UserActionsButton: React.FC<UserActionsButtonProps> = ({ isAuthenticated }
                                                 onClick={handleSignInClick}
                                                 className={classNames(
                                                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                    'block px-4 py-2 text-sm'
+                                                    'block px-4 py-2 '
                                                 )}
                                             >
                                                 Sign In
@@ -127,7 +128,7 @@ const UserActionsButton: React.FC<UserActionsButtonProps> = ({ isAuthenticated }
                                                 onClick={handleSignUpClick}
                                                 className={classNames(
                                                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                    'block px-4 py-2 text-sm'
+                                                    'block px-4 py-2'
                                                 )}
                                             >
                                                 Sign Up
@@ -141,8 +142,9 @@ const UserActionsButton: React.FC<UserActionsButtonProps> = ({ isAuthenticated }
                 </Transition>
             </Menu>
 
-            <UserPreferenceEditor isOpen={isPreferencesOpen} onClose={closePreferencesModal} availableSports={[]} />
+            <UserPreferenceEditor isOpen={isPreferencesOpen} onClose={closePreferencesModal} />
             <EditPasswordPage isOpen={isPasswordOpen} onClose={closePasswordModal} />
+        </UserProvider>
         </>
     );
 };

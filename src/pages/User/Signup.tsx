@@ -30,6 +30,10 @@ const SignUpPage: React.FC = () => {
         }
     };
 
+    const navigateToSignIn = () => {
+        navigate("/user/signin");
+    };
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="w-full max-w-md p-8 space-y-8 bg-white rounded shadow-md">
@@ -92,6 +96,14 @@ const SignUpPage: React.FC = () => {
                         </button>
                     </div>
                 </form>
+                <div className="flex justify-center mt-4">
+                    <button
+                        onClick={navigateToSignIn}
+                        className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                    >
+                        Already have an account? Sign In
+                    </button>
+                </div>
             </div>
         </div>
     );

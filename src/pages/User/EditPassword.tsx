@@ -1,7 +1,5 @@
-
-import React, { useState } from "react";
-import { patchUserPassword } from "../../contexts/User/actions";
-import { useUserDispatch } from "../../contexts/User/context";
+import React, { useRef } from "react";
+import { API_ENDPOINT } from "../../config/constants";
 
 interface EditPasswordPageProps {
     isOpen: boolean;
@@ -9,24 +7,41 @@ interface EditPasswordPageProps {
 }
 
 const EditPasswordPage: React.FC<EditPasswordPageProps> = ({ isOpen, onClose }) => {
-
-    const [currentPassword, setCurrentPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const dispatch = useUserDispatch();
+    const currentPasswordRef = useRef<HTMLInputElement>(null);
+    const newPasswordRef = useRef<HTMLInputElement>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        await patchUserPassword(dispatch, { current_password: currentPassword, new_password: newPassword });
-        onClose();
+
+        const currentPassword = currentPasswordRef.current?.value;
+        const newPassword = newPasswordRef.current?.value;
+        if (!currentPassword || !newPassword) {
+            console.error("Current password and new password are required");
+            return;
+        } e.preventDefault();
+        try {
+            const response = await fetch(`${API_ENDPOINT}/user/password`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ currentPassword, newPassword }),
+            });
+            if (!response.ok) {
+                throw new Error("Failed to change password");
+            }
+            onClose();
+        } catch (error) {
+            console.error("Action failed:", error);
+        }
     };
 
     if (!isOpen) return null;
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-md p-8 space-y-8 bg-white rounded shadow-md">
-                <h2 className="text-2xl font-bold text-center">Edit Password</h2>
-                <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center bg-gray-800 bg-opacity-75">
+            <div className="relative bg-white w-full max-w-md p-8 rounded shadow-md">
+                <h2 className="text-2xl text-gray-600 font-bold text-center mb-4">Edit Password</h2>
+                <form className="space-y-6" onSubmit={(e) => handleSubmit(e)}>
                     <div>
                         <label htmlFor="current-password" className="block text-sm font-medium text-gray-700">Current Password</label>
                         <input
@@ -35,9 +50,8 @@ const EditPasswordPage: React.FC<EditPasswordPageProps> = ({ isOpen, onClose }) 
                             type="password"
                             autoComplete="current-password"
                             required
-                            value={currentPassword}
-                            onChange={(e) => setCurrentPassword(e.target.value)}
-                            className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            ref={currentPasswordRef}
+                            className="block w-full px-4 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
                         />
                     </div>
                     <div>
@@ -48,9 +62,8 @@ const EditPasswordPage: React.FC<EditPasswordPageProps> = ({ isOpen, onClose }) 
                             type="password"
                             autoComplete="new-password"
                             required
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            ref={newPasswordRef}
+                            className="block w-full px-4 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
                         />
                     </div>
                     <div>

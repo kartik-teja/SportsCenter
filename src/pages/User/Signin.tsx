@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const SignInPage: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -22,11 +23,19 @@ const SignInPage: React.FC = () => {
             }
             const data = await response.json();
             localStorage.setItem('authToken', data.auth_token);
-            localStorage.setItem('userData', JSON.stringify(data.user))
+            localStorage.setItem('userData', JSON.stringify(data.user));
             navigate("/");
         } catch (error) {
-            console.error("Signin failed:", error);
+            setErrorMessage("Signin failed: " + error);
         }
+    };
+
+    const navigateToSignUp = () => {
+        navigate("/user/signup");
+    };
+
+    const closeModal = () => {
+        setErrorMessage("");
     };
 
     return (
@@ -75,6 +84,30 @@ const SignInPage: React.FC = () => {
                         </button>
                     </div>
                 </form>
+                <div className="flex justify-center mt-4">
+                    <button
+                        onClick={navigateToSignUp}
+                        className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                    >
+                        Don't have an account? Sign Up
+                    </button>
+                </div>
+                {errorMessage && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                        <div className="w-full max-w-md p-6 bg-white rounded-md shadow-md">
+                            <h3 className="text-lg font-medium text-red-600">Error</h3>
+                            <p className="mt-2 text-sm text-gray-600">{errorMessage}</p>
+                            <div className="mt-4">
+                                <button
+                                    onClick={closeModal}
+                                    className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

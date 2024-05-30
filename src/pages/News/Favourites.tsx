@@ -7,6 +7,7 @@ import { team } from '../../contexts/Teams/types';
 import { fetchNews } from '../../contexts/News/actions';
 import { fetchSport } from '../../contexts/Sports/actions';
 import { fetchTeam } from '../../contexts/Teams/actions';
+import NewsPanel from './NewsPanel'; // Adjust the import path as needed
 
 const Favourites: React.FC = () => {
     const NewsState = useNewsState();
@@ -17,7 +18,8 @@ const Favourites: React.FC = () => {
     const TeamDispatch = useTeamDispatch();
     const [selectedSport, setSelectedSport] = useState<string>("Select the Sport");
     const [selectedTeam, setSelectedTeam] = useState<string>("Select The Team");
-
+    const [isNewsPanelOpen, setIsNewsPanelOpen] = useState<boolean>(false);
+    const [selectedArticleId, setSelectedArticleId] = useState<number | null>(null);
 
     useEffect(() => {
         fetchNews(NewsDispatch);
@@ -34,6 +36,16 @@ const Favourites: React.FC = () => {
         const teamMatch = article.teams.some(team => team.id.toString() === selectedTeam);
         return sportMatch && teamMatch;
     });
+
+    const openNewsPanel = (articleId: number) => {
+        setSelectedArticleId(articleId);
+        setIsNewsPanelOpen(true);
+    };
+
+    const closeNewsPanel = () => {
+        setIsNewsPanelOpen(false);
+        setSelectedArticleId(null);
+    };
 
     return (
         <div className="p-4">
@@ -64,19 +76,31 @@ const Favourites: React.FC = () => {
             <div className="space-y-4 max-h-56 overflow-auto text-left mt-4">
                 {filteredNews.length > 0 ? (
                     filteredNews.map(article => (
-                        <div key={article.id} className="border bg-white p-4 rounded-lg  md:flex-row">
+                        <div key={article.id} className="border bg-white p-4 rounded-lg">
                             <h2 className="text font-bold mb-2">{article.title}</h2>
                             <p className="mb-2">{article.summary}</p>
-                            <button className="text-center bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition-colors duration-300">Read more</button>
+                            <button
+                                className="text-center bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition-colors duration-300"
+                                onClick={() => openNewsPanel(article.id)}
+                            >
+                                Read more
+                            </button>
                         </div>
                     ))
                 ) : (
                     <p className="text-white text-center">No news available</p>
                 )}
             </div>
+
+            {selectedArticleId !== null && (
+                <NewsPanel
+                    isOpen={isNewsPanelOpen}
+                    onClose={closeNewsPanel}
+                    articleId={selectedArticleId}
+                />
+            )}
         </div>
     );
-
 };
 
 export default Favourites;
