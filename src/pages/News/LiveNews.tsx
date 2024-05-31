@@ -61,10 +61,7 @@ const LiveNewsList = () => {
         updateSportsList();
     }, [teamData, teamsList]);
 
-    const filteredTeams = teamData.filter(team => {
-        const sport = sportData.sports.find(sport => sport.id.toString() === selectedSport);
-        return sport && team.plays === sport.name && teamsList.includes(team.name);
-    });
+
 
     const filteredSports = () => {
         const authToken = localStorage.getItem('authToken');
