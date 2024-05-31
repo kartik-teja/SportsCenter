@@ -70,8 +70,7 @@ const LiveNewsList = () => {
         const authToken = localStorage.getItem('authToken');
         if (authToken) {
             return sportData.sports.filter(sport => {
-                return sportsList.includes(sport.name) ||
-                    sportsList.some(sportName => filteredTeams.some(team => team.plays.includes(sportName)));
+                return sportsList.includes(sport.name);
             });
         } else {
             return sportData.sports;

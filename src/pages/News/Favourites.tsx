@@ -112,17 +112,13 @@ const Favourites: React.FC = () => {
         const authToken = localStorage.getItem('authToken')
         if (authToken) {
             return SportState.sportData.sports.filter(sport => {
-                const isIncluded = (sportsList.includes(sport.name) || sportsList.some(sportName =>
-                    filteredTeams2.some(team => team.plays.includes(sportName))))
-                return isIncluded;
+                const isSportIncluded = sportsList.includes(sport.name);
+                return isSportIncluded;
             });
         } else {
             return SportState.sportData.sports;
         }
     };
-    console.log(filteredTeams())
-    console.log(filteredTeams1)
-    console.log(filteredTeams2)
 
     return (
         <div className="p-4">
