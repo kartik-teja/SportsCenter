@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNewsDispatch, useNewsState } from '../../contexts/News/context';
-import { useSportDispatch, useSportState } from '../../contexts/Sports/context';
 import { sport } from '../../contexts/Sports/types';
-import { useTeamDispatch, useTeamState } from '../../contexts/Teams/context';
 import { team } from '../../contexts/Teams/types';
 import { fetchNews } from '../../contexts/News/actions';
+import NewsPanel from './NewsPanel';
+import { API_ENDPOINT } from '../../config/constants';
 import { fetchSport } from '../../contexts/Sports/actions';
+import { useSportState, useSportDispatch } from '../../contexts/Sports/context';
 import { fetchTeam } from '../../contexts/Teams/actions';
-import NewsPanel from './NewsPanel'; // Adjust the import path as needed
+import { useTeamState, useTeamDispatch } from '../../contexts/Teams/context';
 
 const Favourites: React.FC = () => {
     const NewsState = useNewsState();
@@ -18,6 +19,8 @@ const Favourites: React.FC = () => {
     const TeamDispatch = useTeamDispatch();
     const [selectedSport, setSelectedSport] = useState<string>("Select the Sport");
     const [selectedTeam, setSelectedTeam] = useState<string>("Select The Team");
+    const [teamsList, setTeamsList] = useState<string[]>([]);
+    const [sportsList, setSportsList] = useState<string[]>([]);
     const [isNewsPanelOpen, setIsNewsPanelOpen] = useState<boolean>(false);
     const [selectedArticleId, setSelectedArticleId] = useState<number | null>(null);
 
@@ -25,14 +28,51 @@ const Favourites: React.FC = () => {
         fetchNews(NewsDispatch);
         fetchSport(SportDispatch);
         fetchTeam(TeamDispatch);
+        fetchPreferences();
+
     }, [SportDispatch, TeamDispatch, NewsDispatch]);
 
-    const filterTeam = (team: team) => {
-        return team.plays === SportState.sportData.sports.find(sport => sport.id.toString() === selectedSport)?.name;
-    }
+
+
+    const fetchPreferences = async () => {
+        const userData = localStorage.getItem('userData');
+        if (userData) {
+            const { preferences } = JSON.parse(userData);
+            setSportsList(preferences.selectedSports);
+            setTeamsList(preferences.selectedTeams);
+        } else {
+            try {
+                const sportsResponse = await fetch(`${API_ENDPOINT}/sports`);
+                const sportsData = await sportsResponse.json();
+                setSportsList(sportsData.sports);
+
+                const teamsResponse = await fetch(`${API_ENDPOINT}/teams`);
+                const teamsData = await teamsResponse.json();
+                setTeamsList(teamsData);
+                if (!sportsResponse.ok || !teamsResponse.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+    };
+
+    useEffect(() => {
+        const updateSportsList = () => {
+            const updatedSportsList: string[] = [];
+            TeamState.teamData.forEach(team => {
+                if (teamsList.includes(team.name)) {
+                    updatedSportsList.push(team.plays);
+                }
+            });
+            setSportsList(prevSportsList => [...prevSportsList, ...updatedSportsList]);
+        };
+        updateSportsList();
+    }, [TeamState.teamData, teamsList]);
 
     const filteredNews = NewsState.newsData.filter(article => {
-        const sportMatch = article.sport.id.toString() === selectedSport;
+        const sportMatch = article.sport.id.toString() === selectedSport && sportsList.includes(article.sport.name);
         const teamMatch = article.teams.some(team => team.id.toString() === selectedTeam);
         return sportMatch && teamMatch;
     });
@@ -47,6 +87,36 @@ const Favourites: React.FC = () => {
         setSelectedArticleId(null);
     };
 
+    const filteredTeams = () => {
+        return teamsList.length > 0 ? (filteredTeams2.length > 0 ? filteredTeams2 : filteredTeams1) : TeamState.teamData;
+    };
+
+    const filteredTeams1 = TeamState.teamData.filter(team => {
+        const isIncluded = team.plays === SportState.sportData.sports.find(sport => sport.id.toString() === selectedSport)?.name;
+        return isIncluded;
+    });
+
+    const filteredTeams2 = TeamState.teamData.filter(team => {
+        const sport = SportState.sportData.sports.find(sport => sport.id.toString() === selectedSport);
+        const isIncluded = sport && team.plays === sport.name && teamsList.includes(team.name);
+        return isIncluded;
+    });
+
+
+    const filteredSports = () => {
+        const authToken = localStorage.getItem('authToken')
+        if (authToken) {
+            return SportState.sportData.sports.filter(sport => {
+                const isIncluded = (sportsList.includes(sport.name) || sportsList.some(sportName =>
+                    filteredTeams2.some(team => team.plays.includes(sportName))))
+                return isIncluded;
+            });
+        } else {
+            return SportState.sportData.sports;
+        }
+    };
+
+    console.log(filteredSports())
     return (
         <div className="p-4">
             <div className="relative text-left">
@@ -55,7 +125,7 @@ const Favourites: React.FC = () => {
                     onChange={(e) => setSelectedSport(e.target.value)}
                     className="inline-flex justify-center w-full px-4 py-2 border rounded bg-white"
                 ><option>Select a Sport</option>
-                    {SportState.sportData.sports.map((sport: sport) => (
+                    {filteredSports().map((sport: sport) => (
                         <option key={sport.id} value={sport.id}>{sport.name}</option>
                     ))}
                 </select>
@@ -67,7 +137,7 @@ const Favourites: React.FC = () => {
                     onChange={(e) => setSelectedTeam(e.target.value)}
                     className="inline-flex justify-center w-full px-4 py-2 border rounded bg-white"
                 ><option>Select a Team</option>
-                    {TeamState.teamData.filter(filterTeam).map((team: team) => (
+                    {filteredTeams().map((team: team) => (
                         <option key={team.id} value={team.id}>{team.name}</option>
                     ))}
                 </select>
