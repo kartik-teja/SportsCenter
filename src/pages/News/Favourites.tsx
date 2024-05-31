@@ -126,7 +126,7 @@ const Favourites: React.FC = () => {
                 <select
                     value={selectedSport}
                     onChange={(e) => setSelectedSport(e.target.value)}
-                    className="inline-flex justify-center w-full px-4 py-2 border rounded bg-white"
+                    className="inline-flex justify-center w-full h-full px-4 py-2 border rounded bg-white"
                 ><option>Select a Sport</option>
                     {filteredSports().map((sport: sport) => (
                         <option key={sport.id} value={sport.id}>{sport.name}</option>
@@ -146,7 +146,7 @@ const Favourites: React.FC = () => {
                 </select>
             </div>
 
-            <div className="space-y-4 max-h-56 overflow-auto text-left mt-4">
+            <div className="space-y-4 h-auto overflow-auto text-left mt-4">
                 {filteredNews.length > 0 ? (
                     filteredNews.map(article => (
                         <div key={article.id} className="border bg-white p-4 rounded-lg">
