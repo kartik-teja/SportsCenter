@@ -73,7 +73,7 @@ const Favourites: React.FC = () => {
     }, [TeamState.teamData, teamsList]);
 
     const filteredNews = NewsState.newsData.filter(article => {
-        const sportMatch = article.sport.id.toString() === selectedSport && sportsList.includes(article.sport.name);
+        const sportMatch = article.sport.id.toString() === selectedSport;
         const teamMatch = article.teams.some(team => team.id.toString() === selectedTeam);
         return sportMatch && teamMatch;
     });
@@ -89,8 +89,12 @@ const Favourites: React.FC = () => {
     };
 
     const filteredTeams = () => {
-        return teamsList.length > 0 ? (filteredTeams2.length > 0 ? filteredTeams2 : filteredTeams1) : TeamState.teamData;
+        return teamsList.length > 0 ? (filteredTeams2.length > 0 ? filteredTeams2 : filteredTeams1) : TeamState.teamData.filter(team => {
+            const isIncluded = team.plays === SportState.sportData.sports.find(sport => sport.id.toString() === selectedSport)?.name;
+            return isIncluded;
+        });
     };
+
 
     const filteredTeams1 = TeamState.teamData.filter(team => {
         const isIncluded = team.plays === SportState.sportData.sports.find(sport => sport.id.toString() === selectedSport)?.name;
@@ -116,6 +120,9 @@ const Favourites: React.FC = () => {
             return SportState.sportData.sports;
         }
     };
+    console.log(filteredTeams())
+    console.log(filteredTeams1)
+    console.log(filteredTeams2)
 
     return (
         <div className="p-4">
