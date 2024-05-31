@@ -10,6 +10,7 @@ import { useSportState, useSportDispatch } from '../../contexts/Sports/context';
 import { fetchTeam } from '../../contexts/Teams/actions';
 import { useTeamState, useTeamDispatch } from '../../contexts/Teams/context';
 
+
 const Favourites: React.FC = () => {
     const NewsState = useNewsState();
     const NewsDispatch = useNewsDispatch();
@@ -116,7 +117,6 @@ const Favourites: React.FC = () => {
         }
     };
 
-    console.log(filteredSports())
     return (
         <div className="p-4">
             <div className="relative text-left">
@@ -171,6 +171,10 @@ const Favourites: React.FC = () => {
             )}
         </div>
     );
+
 };
 
+
+
 export default Favourites;
+
