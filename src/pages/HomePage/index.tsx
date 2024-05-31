@@ -39,7 +39,6 @@ function Home() {
             </div>
             <div className="flex flex-col min-h-screen bg-gray-100">
                 <div className="mx-2 my-4 p-4 bg-white rounded shadow-md">
-                    <h2 className='text-3xl text-strong text-left text-gray-800 px-1'>Live Games</h2>
                     <MatchList />
                 </div>
                 <h1 className='text-3xl text-left pl-4 text-gray-800'>Trending News</h1>

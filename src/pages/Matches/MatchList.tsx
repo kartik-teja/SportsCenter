@@ -16,10 +16,11 @@ const MatchList = () => {
     }
 
     return (
-        <MatchProvider>
-            <button className="px-4 py-2 border rounded bg-blue-500 text-white" onClick={refreshMatches}>Refresh Scores</button>
-            {toggle ? <MatchCard key={1} /> : <MatchCard key={2} />}
-        </MatchProvider>
+        <><h2 className='text-3xl text-strong pr-4 inline text-left text-gray-800 px-1'>Live Games</h2>
+            <MatchProvider>
+                <button className="px-2 py-1 border rounded bg-blue-500 text-white" onClick={refreshMatches}>Refresh Scores</button>
+                {toggle ? <MatchCard key={1} /> : <MatchCard key={2} />}
+            </MatchProvider></>
     );
 };
 
